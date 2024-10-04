@@ -1,5 +1,6 @@
 ﻿window.themePreference = {
     setTheme: function (theme) {
+        console.log("set theme");
         try {
             localStorage.setItem("themePreference", theme);
         } catch (error) {
@@ -8,6 +9,7 @@
     },
 
     getTheme: function () {
+        console.log("get theme");
         try {
             return localStorage.getItem("themePreference");
         } catch (error) {

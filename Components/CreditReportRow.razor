@@ -1,6 +1,8 @@
-﻿@using CreditReportApp2.Data
+﻿
+@using CreditReportApp2.Data
 @inject IJSRuntime JsRuntime
 @typeparam T
+
 <tr class="@GetHighlightClass()">
     <MudTd DataLabel="Customer ID" Style="text-align:center; width: 15%;">@Report.CustomerID</MudTd>
     <MudTd DataLabel="First Name" Style="text-align:center; width: 20%;">@Report.FirstName</MudTd>
@@ -17,28 +19,18 @@
     [Parameter] public EventCallback<CreditReport> OnDetailsClicked { get; set; }
 
     private bool isHighlighted = false;
-    private bool shouldCheckLocalStorage = true; // Flag to indicate we need to check localStorage
+    private bool shouldCheckLocalStorage = true;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender && shouldCheckLocalStorage)
         {
-            // Get the selected credit scores from localStorage
             var selectedScoresJson = await JsRuntime.InvokeAsync<string>("localStorage.getItem", $"creditReport_{Report.CustomerID}");
 
-            if (!string.IsNullOrEmpty(selectedScoresJson))
-            {
-                // If the report exists in localStorage, mark the row as highlighted
-                isHighlighted = true;
-            }
-            else
-            {
-                isHighlighted = false;
-            }
-   
-            // Update the highlighting state
-            StateHasChanged(); // Force re-render to update the UI with highlight
-            shouldCheckLocalStorage = false; // Reset flag to prevent repeated checks
+            isHighlighted = !string.IsNullOrEmpty(selectedScoresJson);
+
+            StateHasChanged();
+            shouldCheckLocalStorage = false;
         }
     }
 
