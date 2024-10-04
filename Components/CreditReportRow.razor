@@ -9,8 +9,8 @@
     <MudTd DataLabel="Last Name" Style="text-align:center; width: 20%;">@Report.LastName</MudTd>
     <MudTd DataLabel="Credit Report Name" Style="text-align:center; width: 20%;">@Report.ReportName</MudTd>
     <MudTd DataLabel="Credit Score" Style="text-align:center; width: 10%;">@Report.CreditScore</MudTd>
-    <MudTd DataLabel="View Details" Style="text-align:center; width: 15%;">
-        <MudButton OnClick="() => OnDetailsClicked.InvokeAsync(Report)" Color="Color.Primary">View Details</MudButton>
+    <MudTd DataLabel="View Details" Style="text-align:center; width: 15%;" id="viewDetails">
+        <MudButton OnClick="() => OnDetailsClicked.InvokeAsync(Report)">View Details</MudButton>
     </MudTd>
 </tr>
 

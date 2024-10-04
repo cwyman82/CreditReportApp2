@@ -5,7 +5,11 @@ using CreditReportApp2.Data;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Components;
 
-public class CreditReportService
+public interface ICreditReportService
+{
+    Task<List<CreditReport>> GetCreditReportsAsync();
+}
+public class CreditReportService : ICreditReportService
 {
     private readonly HttpClient _httpClient;
 
@@ -20,4 +24,5 @@ public class CreditReportService
         return await _httpClient.GetFromJsonAsync<List<CreditReport>>("data/creditReports.json");
     }
 }
+
 

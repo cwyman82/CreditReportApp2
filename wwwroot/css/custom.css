@@ -33,12 +33,14 @@ body {
     color: #333; /* Dark gray text for better readability */
 }
 
-.mud-grid {
-    display: flex;
-    justify-content: center; /* Center the table */
-    align-items: stretch; /* Allow the item to fill the height */
-    width: 100%;
-}
+/*.mud-grid {*/
+    /*display: flex;*/
+    /*margin-left: auto;
+    margin-right: auto;
+    justify-content: center;*/ /* Center the table */
+    /*align-items: stretch;*/ /* Allow the item to fill the height */
+    /*width: 100%;
+}*/
 
 /* Make cards responsive */
 .mud-card {
@@ -50,15 +52,18 @@ body {
 /* Style buttons */
 .mud-button {
     border-radius: 4px;
+    background-color: mediumvioletred; 
+    color: white;
 }
 
 /* Responsive Table */
-.mud-table {
-    width: 100%; /* Ensure table takes full width */
-    margin: auto; /* Center the table */
-    table-layout: auto; /* Automatically adjust column widths */
-    overflow-x: auto; /* Allow horizontal scrolling if necessary */
-}
+/*.mud-table {
+    width: 100%;*/ /* Ensure table takes full width */
+    /*margin-left: auto;
+    margin-right: auto;
+    table-layout: auto;*/ /* Automatically adjust column widths */
+    /*overflow-x: auto;*/ /* Allow horizontal scrolling if necessary */
+/*}*/
 
     /* Optional: Adjust table header styles */
     .mud-table thead {
@@ -80,6 +85,7 @@ body {
 /* Highlighted row */
 .highlight {
     background-color: #ffeb3b; /* Yellow highlight */
+    color: black;
 }
 
 /* Media Queries for Responsiveness */
@@ -90,11 +96,15 @@ body {
 
     .mud-button {
         width: 100%; /* Full-width buttons on small screens */
+        border-radius: 4px;
+        background-color: mediumvioletred;
+        color: white;
     }
 
     .mud-table {
         width: 100%;
-        margin: auto;
+        margin-left: auto;
+        margin-right: auto;
         overflow-x: auto; /* Allow horizontal scrolling on smaller screens */
     }
 }
@@ -110,19 +120,25 @@ body {
 }
 
 .center-container {
-   
-    justify-content: center; /* Center vertically */
-    align-items: center; /* Center horizontally */
+    /*display: flex;*/ /* Enable flexbox layout */
+    margin-left: auto;
+    margin-right: auto;
+   /* justify-content: center;*/ /* Center vertically */
+   /* align-items: center;*/ /* Center horizontally */
     height: 100vh; /* Full viewport height */
     text-align: center; /* Center text inside the div */
-    padding: 20px; /* Optional padding */
+    padding: 10px; /* Optional padding */
+    padding-top: 30px; /* Optional padding */
 }
 
 h2 {
+
     text-align: center;
     margin-top: 64px; /* Adjust based on your app bar height */
 }
 h3 {
     text-align: center;
+    
     margin-top: 64px; /* Adjust based on your app bar height */
 }
+

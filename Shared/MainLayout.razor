@@ -1,20 +1,18 @@
-﻿
-@inherits LayoutComponentBase
+﻿@inherits LayoutComponentBase
 @inject IJSRuntime JsRuntime
 @using MudBlazor
 @using CreditReportApp2.Shared
 
-<MudThemeProvider Theme="@currentTheme" />
+<MudThemeProvider @bind-IsDarkMode="@_isDarkMode" Theme="MyCustomTheme" /> 
 <MudAppBar Color="Color.Primary" Elevation="4">
     <MudIconButton Icon="@Icons.Material.Filled.Menu" style="color: mediumvioletred" OnClick="ToggleDrawer" />
     <MudText Typo="Typo.h6">Credit Report App</MudText>
     <MudSpacer />
-    <MudSwitch T="bool" @bind-Checked="isDarkMode" Color="Color.Primary" Label="Dark Mode" OnChange="ToggleDarkMode" />
+   <MudToggleIconButton @bind-Toggled="_isDarkMode" Icon="@Icons.Material.Filled.DarkMode" Color="Color.Default" ToggledIcon="@Icons.Material.Filled.WbSunny" ToggledColor="@Color.Default" />
 </MudAppBar>
 
-<MudDrawer @bind-Open="isDrawerOpen">
+<MudDrawer @bind-Open="isDrawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
     <MudDrawerContent>
-        <!-- Navigation items can go here -->
         <NavMenu />
     </MudDrawerContent>
 </MudDrawer>
@@ -24,70 +22,35 @@
 </MudMainContent>
 
 @code {
+    private bool _isDarkMode;
     private bool isDarkMode = false;
     private MudTheme currentTheme;
-    private bool isDrawerOpen = false;    // State for MudDrawer open/close
+    private MudThemeProvider _mudThemeProvider;
+    private bool isDrawerOpen = false;
 
-    private readonly MudTheme lightTheme = new MudTheme()
+    MudTheme MyCustomTheme = new MudTheme()
     {
         PaletteLight = new PaletteLight()
         {
             Primary = Colors.Blue.Default,
             Secondary = Colors.Green.Accent4,
-        }
-    };
-
-    private readonly MudTheme darkTheme = new MudTheme()
-    {
+        },
         PaletteDark = new PaletteDark()
         {
-                Primary = "#424242", 
-                Secondary = "#607D8B", 
-                Background = "#121212", 
-                Surface = "#1E1E1E",    
-                TextPrimary = Colors.Shades.White,
-                AppbarBackground = "#212121", 
+            Primary = "#424242", 
+            Secondary = "#607D8B", 
+            Background = "#121212", 
+            Surface = "#1E1E1E",    
+            TextPrimary = Colors.Shades.White,
+            AppbarBackground = "#212121", 
         }
     };
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            // Check localStorage to get the saved theme preference
-            var savedTheme = await JsRuntime.InvokeAsync<string>("localStorage.getItem", "themePreference");
-            isDarkMode = savedTheme == "dark";
-            SetTheme();
-
-            // Force re-render to apply the theme
-            StateHasChanged();
-        }
-    }
-
-    private void SetTheme()
-    {
-        Console.WriteLine("set theme");
-        currentTheme = isDarkMode ? darkTheme : lightTheme;
-    }
-
-    private async Task ToggleDarkMode()
-    {
-        
-        // Toggle between light and dark mode
-        isDarkMode = !isDarkMode;
-        SetTheme();
-
-        // Save the user's preference in localStorage
-        await JsRuntime.InvokeVoidAsync("localStorage.setItem", "themePreference", isDarkMode ? "dark" : "light");
-        // Reload the page to clear the UI state
-        await JsRuntime.InvokeVoidAsync("location.reload");
-    }
 
     private void ToggleDrawer()
     {
-        Console.WriteLine("ToggleDrawer");
         isDrawerOpen = !isDrawerOpen; // Toggle drawer open state
     }
 }
+
 
 
