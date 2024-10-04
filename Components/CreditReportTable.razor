@@ -1,0 +1,95 @@
+﻿@page "/credit-reports"
+@inject CreditReportService CreditReportService
+@inject NavigationManager Navigation
+@inject IJSRuntime JsRuntime 
+@using CreditReportApp2.Data
+@using MudBlazor
+
+
+    <h2>Credit Reports</h2>
+<MudContainer Class="center-container">
+    <MudGrid>
+    <MudItem xs="12">
+            <MudTable Items="@creditReports" Hover="true" Class="mud-table">
+            <HeaderContent>
+                    <MudTh Style="text-align:center; width: auto;" class="bg-primary text-white">Customer ID</MudTh>
+                    <MudTh Style="text-align:center; width: auto;" class="bg-primary text-white">First Name</MudTh>
+                    <MudTh Style="text-align:center; width: auto;" class="bg-primary text-white">Last Name</MudTh>
+                    <MudTh Style="text-align:center; width: auto;" class="bg-primary text-white">Credit Report Name</MudTh>
+                    <MudTh Style="text-align:center; width: auto;" class="bg-primary text-white">Credit Score</MudTh>
+                    <MudTh Style="text-align:center; width: auto;" class="bg-primary text-white">View Details</MudTh>
+            </HeaderContent> 
+
+             <RowTemplate>
+                <CreditReportRow T="CreditReport" Report="context" OnDetailsClicked="NavigateToDetails" />
+            </RowTemplate>
+        </MudTable>
+        <br />
+        <br />
+            <MudButton style="background-color: mediumvioletred; color: white" OnClick="ClearSelection">Clear All Selected</MudButton>
+    </MudItem>
+        </MudGrid>
+    </MudContainer>
+
+@code {
+    private List<CreditReport> creditReports;
+    private bool clearSelectionFlag = false; // Flag to indicate that clear selection has been requested
+
+    protected override async Task OnInitializedAsync()
+    {
+        creditReports = await CreditReportService.GetCreditReportsAsync();
+    }
+
+    private async Task NavigateToDetails(CreditReport report)
+    {
+
+        var existingScoresJson = await JsRuntime.InvokeAsync<string>("localStorage.getItem", $"creditReport_{report.CustomerID}");
+        var existingScores = new List<string>();
+
+        if (!string.IsNullOrEmpty(existingScoresJson))
+        {
+            existingScores = Newtonsoft.Json.JsonConvert.DeserializeObject<List<string>>(existingScoresJson);
+        }
+
+        // Add the new score if it doesn't already exist
+        if (!existingScores.Contains(report.CustomerID.ToString()))
+        {
+            existingScores.Add(report.CustomerID.ToString());
+        }
+
+        // Store the updated scores back in localStorage
+        await JsRuntime.InvokeVoidAsync("localStorage.setItem", $"creditReport_{report.CustomerID}", Newtonsoft.Json.JsonConvert.SerializeObject(report));
+
+        // Navigate to the details page
+        Navigation.NavigateTo($"/credit-report-details/{report.CustomerID}");
+    }
+
+    private async Task ClearSelection()
+    {
+        // Remove all selected credit reports from localStorage
+        foreach (var report in creditReports)
+        {
+            await JsRuntime.InvokeVoidAsync("localStorage.removeItem", $"creditReport_{report.CustomerID}");
+        }
+
+        // Optionally, remove the selectedCreditScores array
+        await JsRuntime.InvokeVoidAsync("localStorage.removeItem", "selectedCreditScores");
+
+        // Reload the page to clear the UI state
+        await JsRuntime.InvokeVoidAsync("location.reload");
+
+        // Force re-render (optional)
+        StateHasChanged();
+    }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && clearSelectionFlag)
+        {
+            // Remove the selected credit scores array from localStorage
+            await JsRuntime.InvokeVoidAsync("localStorage.removeItem", "selectedCreditScores");
+            clearSelectionFlag = false; // Reset the flag after clearing selection
+        }
+    }
+}
+
+

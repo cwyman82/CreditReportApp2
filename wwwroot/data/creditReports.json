@@ -1,0 +1,30 @@
+[
+  {
+    "CustomerID": "1",
+    "FirstName": "Homer",
+    "LastName": "Simpson",
+    "ReportName": "Expirian",
+    "CreditScore": 700
+  },
+  {
+    "CustomerID": "2",
+    "FirstName": "Johnny",
+    "LastName": "Carson",
+    "ReportName": "Transunion",
+    "CreditScore": 750
+  },
+  {
+    "CustomerID": "3",
+    "FirstName": "Mel",
+    "LastName": "Brooks",
+    "ReportName": "Equifax",
+    "CreditScore": 680
+  },
+  {
+    "CustomerID": "4",
+    "FirstName": "Jerry",
+    "LastName": "Lewis",
+    "ReportName": "Expirian",
+    "CreditScore": 800
+  }
+]

@@ -1,0 +1,19 @@
+﻿@page "/"
+
+<h3>Welcome to the Credit Report Viewer App</h3>
+<br />
+<br />
+
+<div class="index-content">
+    <MudButton OnClick="NavigateToReports" Color="Color.Primary">View Credit Reports</MudButton>
+</div>
+
+
+@code {
+    [Inject] private NavigationManager Navigation { get; set; }
+
+    private void NavigateToReports()
+    {
+        Navigation.NavigateTo("/credit-reports");
+    }
+}

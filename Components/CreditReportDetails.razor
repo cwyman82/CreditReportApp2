@@ -1,0 +1,49 @@
+﻿@page "/credit-report-details/{CustomerID}"
+@inject NavigationManager Navigation
+@inject IJSRuntime JsRuntime
+@using CreditReportApp2.Data 
+
+<div class="center-container">
+    @if (Report != null)
+    {
+        <h2><strong>@Report.FirstName @Report.LastName's Credit Report</strong></h2>
+        <h4><strong>Customer ID:</strong> @Report.CustomerID</h4>
+        <h4><strong>Report Name:</strong> @Report.ReportName</h4>
+        <h4><strong>Credit Score:</strong> @Report.CreditScore</h4>
+    }
+    else
+    {
+        <p>Unexpected Error! Couldn't find a record'</p>
+    }
+    <br />
+    <br />
+    <MudButton OnClick="GoBack" Color="Color.Primary">Back</MudButton>
+</div>
+
+
+@code {
+    [Parameter] public string CustomerID { get; set; }
+    [Parameter] public string ReportName { get; set; }
+    [Parameter] public string LastName { get; set; }
+    [Parameter] public int CreditScore { get; set; }
+    private CreditReport Report { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!string.IsNullOrEmpty(CustomerID))
+        {
+            // Retrieve the entire report from localStorage using CustomerID
+            var reportJson = await JsRuntime.InvokeAsync<string>("localStorage.getItem", $"creditReport_{CustomerID}");
+            if (!string.IsNullOrEmpty(reportJson))
+            {
+                Report = Newtonsoft.Json.JsonConvert.DeserializeObject<CreditReport>(reportJson);
+            }
+        }
+    }
+    private void GoBack()
+    {
+        Navigation.NavigateTo("/credit-reports");
+    }
+}
+
+
