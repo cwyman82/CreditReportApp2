@@ -6,18 +6,19 @@
 @using MudBlazor
 
 <h2>Credit Reports</h2>
-<MudContainer Class="center-container">
+<div class="center-container">
+<MudContainer>
     <MudGrid>
         <MudItem>
             <MudTable Items="@creditReports" Hover="true" Class="mud-table">
                 <HeaderContent>
                     <MudTr>
-                        <MudTh Style="text-align:center;" class="bg-primary text-white">Customer ID</MudTh>
-                        <MudTh Style="text-align:center;" class="bg-primary text-white">First Name</MudTh>
-                        <MudTh Style="text-align:center;" class="bg-primary text-white">Last Name</MudTh>
-                        <MudTh Style="text-align:center;" class="bg-primary text-white">Credit Report Name</MudTh>
-                        <MudTh Style="text-align:center;" class="bg-primary text-white">Credit Score</MudTh>
-                        <MudTh Style="text-align:center;" class="bg-primary text-white">View Details</MudTh>
+                        <MudTh Style="text-align:center; width: 15%;" class="bg-primary text-white">Customer ID</MudTh>
+                        <MudTh Style="text-align:center; width: 20%;" class="bg-primary text-white">First Name</MudTh>
+                        <MudTh Style="text-align:center; width: 20%;" class="bg-primary text-white">Last Name</MudTh>
+                        <MudTh Style="text-align:center; width: 20%;" class="bg-primary text-white">Credit Report Name</MudTh>
+                        <MudTh Style="text-align:center; width: 10%;" class="bg-primary text-white">Credit Score</MudTh>
+                        <MudTh Style="text-align:center; width: 15%;" class="bg-primary text-white">View Details</MudTh>
                     </MudTr>
                 </HeaderContent>
 
@@ -31,7 +32,7 @@
         </MudItem>
     </MudGrid>
 </MudContainer>
-
+</div>
 @code {
     private List<CreditReport> creditReports;
     private bool clearSelectionFlag = false;
@@ -43,21 +44,19 @@
 
     private async Task NavigateToDetails(CreditReport report)
     {
-        var existingScoresJson = await JsRuntime.InvokeAsync<string>("localStorage.getItem", $"creditReport_{report.CustomerID}");
-        var existingScores = new List<string>();
+        // Check if there's a CreditReport object stored in localStorage for this CustomerID
+        var existingReportJson = await JsRuntime.InvokeAsync<string>("localStorage.getItem", $"creditReport_{report.CustomerID}");
 
-        if (!string.IsNullOrEmpty(existingScoresJson))
+        if (!string.IsNullOrEmpty(existingReportJson))
         {
-            existingScores = Newtonsoft.Json.JsonConvert.DeserializeObject<List<string>>(existingScoresJson);
-        }
+            // Deserialize the CreditReport object
+            var existingReport = Newtonsoft.Json.JsonConvert.DeserializeObject<CreditReport>(existingReportJson);
 
-        if (!existingScores.Contains(report.CustomerID.ToString()))
-        {
-            existingScores.Add(report.CustomerID.ToString());
         }
 
         await JsRuntime.InvokeVoidAsync("localStorage.setItem", $"creditReport_{report.CustomerID}", Newtonsoft.Json.JsonConvert.SerializeObject(report));
 
+        // Navigate to the details page
         Navigation.NavigateTo($"/credit-report-details/{report.CustomerID}");
     }
 

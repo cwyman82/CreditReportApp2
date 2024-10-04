@@ -1,6 +1,7 @@
 ﻿using Xunit;
 using CreditReportApp2.Data;
 using System.Collections.Generic;
+using Bunit;
 
 public class CreditReportTests
 {
